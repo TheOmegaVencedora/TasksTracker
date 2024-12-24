@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta charset="UTF-8">
+  <title>Login Page</title>
+  <!--<link rel="stylesheet" href="static.css/style.css"> -->
+</head>
+<body>
+<div class="container">
+  <div class="row"><img src="" id="imageAsBackground" alt="" /></div>
+  <div class="row align-items-center justify-content-center" style="height:100vh;">
+    <div class="col-sm-12 col-md-8 col-lg-6 col-xl-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="form-icon">
+            <div class="icon-holder">
+              <i class="fa-2x fa-solid fa-user-plus text-light" style="margin-top: 5px;"></i>
+            </div>
+          </div>
+          <h3 class="text-center">Login</h3>
+          <form action="" th:action="@{/authenticateTheUser}" method="POST">
+
+
+            <!-- Check for login error -->
+
+            <div th:if="${param.error}">
+
+              <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                Invalid username and password.
+              </div>
+
+            </div>
+
+            <div th:if="${param.logout}">
+
+              <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                You have been logged out.
+              </div>
+
+            </div>
+
+
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="userInput" placeholder="Your Username" autocomplete="off" name="username" required>
+              <label for="userInput">Username</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Input your password" required>
+              <label for="passwordInput">Password</label>
+            </div>
+            <br><br>
+            <a th:href="@{/register}">Register</a>
+            <br><br>
+
+            <div class="text-center mb-5">
+              <button class="btn btn-outline-primary" type="submit">Login</button>
+            </div>
+
+
+            <div class="form-group">
+              <div class="col-xs-15">
+                <div>
+
+
+
+
+                </div>
+              </div>
+            </div>
+
+
+
+          </form>
+        </div>
+
+
+        <div class="card-footer text-center">
+          <button class="btn btn-sm btn-primary radius" data-bs-toggle="modal" data-bs-target="#staticBackdrop">See List of Accounts</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="staticBackdrop">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">List of registered accounts</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="table-responsive">
+          <table id="accountTable" class="table table-striped" style="width:100%">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Email</th>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Password</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

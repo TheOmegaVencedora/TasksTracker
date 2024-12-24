@@ -1,0 +1,171 @@
+
+UserDaoImpl
+
+/**  @Autowired
+  private SessionFactory sessionFactory; **/
+
+
+
+
+
+
+/**   @Override
+    public Users findByUsername(String username) {
+
+        TypedQuery<Users> query = entityManager.createQuery("from Users where username=:username", Users.class);
+        query.setParameter("username", username);
+        Users users = null;
+        try{
+            users=query.getSingleResult();
+        }catch (Exception e){
+            users=null;
+        }
+        return users;
+    }**/
+
+
+   /** @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Users users = userDao.findByUsername(username);
+        if(users==null){
+            throw new UsernameNotFoundException("Invalid Username or password");
+        }
+        return u;
+
+    } **/
+
+
+
+    MainController
+     /**  @Autowired
+        private UserService userService; **/
+
+     //BeanUtils.copyProperties(usersForm, users);
+
+
+
+
+            // dao.save(users);
+            // System.out.println("user saved");
+            //System.out.println("names: " + users.getFirstName() + " " + users.getLastName());
+
+
+            //  return "redirect:/loginPage";
+            // }
+
+
+            /** public Users registration(String firstName, String lastName, String username, String password){
+             if (firstName == null || lastName == null || username == null || password == null) {
+             return null;
+             } else {
+             Users users = new Users();
+
+             users.setFirstName(firstName);
+             users.setLastName(lastName);
+             users.setUsername(username);
+             users.setPassword(password);
+
+             return dao.save(users);
+
+             }
+
+             }
+             **/
+
+
+        /** @PostMapping("/registered")
+        public String registered(@ModelAttribute("users")Users theUsers, BindingResult result){
+
+        System.out.println("testing");
+
+        if (result.hasErrors()) {
+        return "TskRegistration";
+        }
+
+        dao.save(theUsers);
+
+        return "redirect:/loginPage";
+        }
+         **/
+
+
+
+
+         UserServiceImpl
+         package com.todowebsite.sample.demo.service;
+
+         import com.todowebsite.sample.demo.dao.UserDao;
+         import com.todowebsite.sample.demo.entity.Users;
+         import com.todowebsite.sample.demo.user.CrmUser;
+         import org.springframework.beans.factory.annotation.Autowired;
+         import org.springframework.security.core.userdetails.UserDetails;
+         import org.springframework.security.core.userdetails.UsernameNotFoundException;
+         import org.springframework.stereotype.Service;
+         import org.springframework.transaction.annotation.Transactional;
+         /**
+         @Service
+         public class UserServiceImpl implements UserService{
+
+            @Autowired
+             private UserDao userDao;
+
+
+
+             @Override
+             @Transactional
+             public void save(CrmUser crmUser) {
+
+                 Users users = new Users();
+
+                 users.setFirstName(crmUser.getFirstName());
+                 users.setLastName(crmUser.getLastName());
+                 users.setUsername(crmUser.getUsername());
+                 users.setPassword(crmUser.getPassword());
+
+                 //userDao.(users);
+
+             }
+
+             @Override
+             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                 return null;
+             }
+         }
+          **/
+
+
+Security Configg password and authentication
+
+/**
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+
+        return new BCryptPasswordEncoder();
+    }
+
+
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+       // auth.setUserDetailsService(userDao);
+        auth.setPasswordEncoder(passwordEncoder());
+
+        return auth;
+    } **/
+
+
+
+    Main Controller
+
+    //    @PostMapping("/authenticatingUser")
+    //    public String authenticateUser(@RequestParam("username") String username, @RequestParam("password") String password, Model model, Users users){
+    //        if(authenticationService.authenticate(username, password)){
+    //            model.addAttribute("users", username);
+    //            return "/home";
+    //        }else {
+    //            model.addAttribute("error", "invalid username or password");
+    //            return "/Login";
+    //        }
+    //
+    //    }
