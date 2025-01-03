@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>add tasks</title>
+</head>
+<body>
+<div class="container col-md-5">
+  <div class="card">
+    <div class="card-body">
+      <form action="/addTasks"  th:object="${tasks}" method="post">
+        <fieldset class="form-group">
+          <label>Task Title</label><input type="text" class="form-control" name="title"  th:field="*{title}"required="required" minlength="5"/>
+        </fieldset>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+      <!--  <fieldset class="form-group">
+          <label>Status</label>
+          <select class="form-control" name="status">
+            <option value="false">Active</option>
+            <option value="true">Finished</option>
+          </select>
+        </fieldset> -->
+
+        <fieldset class="form-control">
+          <label>Date</label>
+          <input type="date" class="form-control" name="finish_date" th:field="*{finish_date}" required="required">
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -28,6 +28,12 @@ public class Users {
    @Column(name = "password")
     private String password;
 
+   @Column(name = "role")
+   private String role;
+
+   @Column(name = "active")
+   private int active;
+
 
 
 
@@ -79,10 +85,24 @@ public class Users {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = "{noop}" + password;
     }
 
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
 
     @Override
     public String toString() {
@@ -92,6 +112,8 @@ public class Users {
                 ", lastName='" + lastName + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", active=" + active +
                 '}';
     }
 }

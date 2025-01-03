@@ -45,7 +45,7 @@ public class MainController {
     }
 
 
-
+    @CrossOrigin
     @GetMapping("/loginPage")
     public String loginPage() {
 

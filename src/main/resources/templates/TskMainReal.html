@@ -19,7 +19,7 @@
 			<tbody>
 				<th:forEach var="Tasks" items="${Tasks}">
 					<tr>
-						<td th:value="${todoItem.title}"></td>
+						<td th:value="*{title}"></td>
 						<td><a href="delete?id=<c:out value='${todoItem.ID}'/>&username=<c:out value='${username}'/>">Delete</a></td>
 					</tr>
 				</th:forEach>

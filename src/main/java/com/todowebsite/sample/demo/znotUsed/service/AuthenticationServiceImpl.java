@@ -17,25 +17,26 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     @Override
     public boolean authenticate(Users users) {
-//        try(Connection conn = dataSource.getConnection();
-//            PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
-//
-//            preparedStatement.setString(1, username);
-//            preparedStatement.setString(2, password);
-//
-//            try(ResultSet rs = preparedStatement.executeQuery()) {
-//
-//                return rs.next();
-//
-//            }
-//
-//        }catch (SQLException e){
-//            throw new RuntimeException(e);
-//        }
+        try(Connection conn = dataSource.getConnection();
+
+            PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
+
+            preparedStatement.setString(1, users.getUsername());
+            preparedStatement.setString(2, users.getPassword());
+
+            try(ResultSet rs = preparedStatement.executeQuery()) {
+
+                return rs.next();
+
+            }
+
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+       }
 
 
 
-        boolean isLoggedin = false;
+    /**    boolean isLoggedin = false;
 
 
 
@@ -56,6 +57,6 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             e.printStackTrace();
         }
         return isLoggedin;
-
+**/
     }
 }

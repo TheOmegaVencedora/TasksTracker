@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div class="row">
+    <div class="container">
+        <a th:href="@{/add}" class="btn btn-primary">Add Item</a>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Start Date</th>
+                <th>Finish Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:forEach var="Tasks" items="${Tasks}">
+                <tr>
+                    <td><th:out value="*{title}"></th:out></td>
+                    <td><th:out value="*{start_date}"></th:out></td>
+                    <td><th:out value="*{finish_date}"></th:out></td>
+                    <td><th:out value="*{status}"></th:out></td>
+                    <td><th:out >check</th:out></td>
+                    <td><a href="delete?id=<c:out value='${todoItem.ID}'/>&username=<c:out value='${username}'/>">Delete</a></td>
+                </tr>
+            </th:forEach>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
