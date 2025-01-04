@@ -2,6 +2,9 @@ package com.todowebsite.sample.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class Users {
@@ -35,6 +38,10 @@ public class Users {
    private int active;
 
 
+   @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   private List<Tasks> tasks;
+
+
 
 
    public Users(){
@@ -47,6 +54,8 @@ public class Users {
         this.username = username;
         this.password = password;
     }
+
+
 
     public int getId() {
         return id;
@@ -104,6 +113,14 @@ public class Users {
         this.active = active;
     }
 
+    public List<Tasks> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Tasks> tasks) {
+        this.tasks = tasks;
+    }
+
     @Override
     public String toString() {
         return "Users{" +
@@ -116,4 +133,16 @@ public class Users {
                 ", active=" + active +
                 '}';
     }
+
+    public void add(Tasks tempTasks){
+
+       if (tasks == null){
+           tasks = new ArrayList<>();
+       }
+       tasks.add(tempTasks);
+
+       tempTasks.setUsers(this);
+
+    }
+
 }

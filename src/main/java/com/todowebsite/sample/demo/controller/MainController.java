@@ -1,6 +1,7 @@
 package com.todowebsite.sample.demo.controller;
 
 import com.todowebsite.sample.demo.dao.UserDao;
+import com.todowebsite.sample.demo.entity.Tasks;
 import com.todowebsite.sample.demo.entity.Users;
 import com.todowebsite.sample.demo.znotUsed.service.AuthenticationService;
 import org.slf4j.Logger;
@@ -73,35 +74,6 @@ public class MainController {
     }
 
 
-    /**
-        @PostMapping("/authenticatingUser")
-        public String authenticateUser(@RequestParam("username") String username, @RequestParam("password") String password, Model model){
-
-            System.out.println("login processing");
-
-            Users theUsers = new Users();
-            theUsers.setUsername(username);
-            theUsers.setPassword(password);
-            if(authenticationService.authenticate(theUsers)){
-                model.addAttribute("username", username);
-                return "/home";
-            }else {
-                //model.addAttribute("error", "invalid username or password");
-                return "/Login";
-
-
-
-            }
-
-
-
-        }
-     **/
-
-
-
-
-
 
     @PostMapping("/accepted")
     public String registered(@ModelAttribute("users")Users theUsers , BindingResult theBindingResult){
@@ -129,14 +101,30 @@ public class MainController {
     @GetMapping("/home")
     public  String mainPage(){
 
-        return "TskMainReal";
+        return "HomePage";
     }
 
 
-    @PostMapping("/add")
-    public String addTask(){
+    @GetMapping("/add")
+    public String addTask(Model model){
 
-        return "TskAdd";
+        Tasks tasks = new Tasks();
+
+        model.addAttribute("tasks", tasks);
+
+        return "addPage";
+    }
+
+    @PostMapping("/addTasks")
+    public String adding(@ModelAttribute("tasks")Tasks theTasks, BindingResult bindingResult){
+
+        if (bindingResult.hasErrors()){
+            return "rough";
+        }
+
+        userDao.addTasks(theTasks);
+
+        return "redirect:/home";
     }
 
 

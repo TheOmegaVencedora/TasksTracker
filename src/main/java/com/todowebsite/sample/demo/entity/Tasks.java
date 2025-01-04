@@ -80,4 +80,12 @@ public class Tasks {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
+    }
 }
