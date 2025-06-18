@@ -18,7 +18,7 @@
             </div>
           </div>
           <h3 class="text-center">REGISTER</h3>
-          <form id="registerForm" th:action="@{/accepted}" th:object="${users}" method="post">
+          <form id="registerForm" th:action="@{/registering}" th:object="${users}" method="post">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="userInput" placeholder="Input your First name" autocomplete="off" th:field="*{firstName}" name="firstName" required>
               <label for="userInput">First Name</label>
@@ -35,10 +35,6 @@
               <input type="password" class="form-control" id="passwordInput" th:field="*{password}" name="password" placeholder="Input your password" required>
               <label for="passwordInput">Password</label>
             </div>
-          <!--  <div class="form-floating mb-3">
-              <input type="password" class="form-control" id="cpasswordInput" name="cpassword" placeholder="Input your password" required>
-              <label for="cpasswordInput">Confirm Password</label>
-            </div> -->
 
             <div class="text-center mb-5">
               <button class="btn btn-outline-primary" type="submit">REGISTER</button>

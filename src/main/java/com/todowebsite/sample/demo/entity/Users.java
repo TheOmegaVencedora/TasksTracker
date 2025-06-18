@@ -1,4 +1,4 @@
-package com.todowebsite.sample.demo.entity;
+package com.todowebsite.sample.demo.Entity;
 
 import jakarta.persistence.*;
 
@@ -13,40 +13,31 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-
-
-
-   @Column(name = "first_name")
+    @Column(name = "first_name")
     private String firstName;
-
-
-
-   @Column(name = "last_name")
-   private String lastName;
-
-
+    @Column(name = "last_name")
+    private String lastName;
     @Column(name = "username")
-   private String username;
-
-   @Column(name = "password")
+    private String username;
+    @Column(name = "password")
     private String password;
 
-   @Column(name = "role")
-   private String role;
+   // @Enumerated(EnumType.STRING)
 
-   @Column(name = "active")
-   private int active;
+    @Convert(converter = RoleConverter.class)
+    @Column(name = "role")
+    private Role role;
+    @Column(name = "active")
+    private int active;
+
+    @OneToMany(mappedBy = "users",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<Tasks> tasks;
 
 
-   @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-   private List<Tasks> tasks;
+    public Users(){
 
+    }
 
-
-
-   public Users(){
-
-   }
 
     public Users(String firstName, String lastName, String username, String password) {
         this.firstName = firstName;
@@ -54,7 +45,6 @@ public class Users {
         this.username = username;
         this.password = password;
     }
-
 
 
     public int getId() {
@@ -94,14 +84,15 @@ public class Users {
     }
 
     public void setPassword(String password) {
-        this.password = "{noop}" + password;
+        this.password = password;
     }
 
-    public String getRole() {
+
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -121,6 +112,17 @@ public class Users {
         this.tasks = tasks;
     }
 
+
+    public void add(Tasks tempTasks){
+
+        if (tasks == null){
+            tasks = new ArrayList<>();
+        }
+        tasks.add(tempTasks);
+
+        tempTasks.setUsers(this);
+    }
+
     @Override
     public String toString() {
         return "Users{" +
@@ -133,16 +135,4 @@ public class Users {
                 ", active=" + active +
                 '}';
     }
-
-    public void add(Tasks tempTasks){
-
-       if (tasks == null){
-           tasks = new ArrayList<>();
-       }
-       tasks.add(tempTasks);
-
-       tempTasks.setUsers(this);
-
-    }
-
 }

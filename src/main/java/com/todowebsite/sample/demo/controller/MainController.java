@@ -1,113 +1,101 @@
-package com.todowebsite.sample.demo.controller;
+package com.todowebsite.sample.demo.Controller;
 
-import com.todowebsite.sample.demo.dao.UserDao;
-import com.todowebsite.sample.demo.entity.Tasks;
-import com.todowebsite.sample.demo.entity.Users;
-import com.todowebsite.sample.demo.znotUsed.service.AuthenticationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.todowebsite.sample.demo.Entity.Tasks;
+import com.todowebsite.sample.demo.Entity.Users;
+import com.todowebsite.sample.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-
-
+import java.security.Principal;
+import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class MainController {
 
-
-    AuthenticationService authenticationService;
-
-
-    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-
+    @Autowired
+    UserService userService;
 
 
     @Autowired
-    public UserDao userDao;
-
-
-
-
+    BCryptPasswordEncoder passwordEncoder;
 
 
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder){
 
-        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
-
+        StringTrimmerEditor trimmerEditor = new StringTrimmerEditor(true);
+        dataBinder.registerCustomEditor(String.class, trimmerEditor);
     }
 
 
-    @CrossOrigin
-    @GetMapping("/loginPage")
-    public String loginPage() {
+    @GetMapping("/login")
+    public String LoginPage(){
 
-
-        return ("Login");
-
+        return ("LoginPage");
     }
 
 
     @GetMapping("/register")
-    public String registration(Model theModel) {
-
+    public String registration(Model theModel){
         Users users = new Users();
-
-
-
         theModel.addAttribute("users", users);
 
 
-        System.out.println("registration form check");
-
-        System.out.println("users: " + users.getUsername() + " \n password: "+  users.getPassword());
-
-        return ("Register");
+        return "Register";
     }
 
+    @PostMapping("/registering")
+    public String registering(@ModelAttribute("users") Users users, BindingResult bindingResult, Model model){
 
-
-    @PostMapping("/accepted")
-    public String registered(@ModelAttribute("users")Users theUsers , BindingResult theBindingResult){
-
-        logger.debug("User object: {}", theUsers);
-
-
-        if (theBindingResult.hasErrors()){
-            return "Register";
+        if(bindingResult.hasErrors()){
+            return "register";
         }
 
-        userDao.save(theUsers);
+       Users existing = userService.findByUserName(users.getUsername());
 
-        System.out.println("entered registered");
+        if (existing != null){
+            model.addAttribute("users", new Users());
+            model.addAttribute("error", "username already exists");
+        }
 
-        System.out.println("registration successful");
-        
+        String encodedPassword = passwordEncoder.encode(users.getPassword());
+        users.setPassword(encodedPassword);
 
 
-        return "redirect:/loginPage";
 
+        userService.save(users);
+
+
+        return "redirect:/login";
     }
 
 
     @GetMapping("/home")
-    public  String mainPage(){
+    public String home(Model model, Principal principal){
+
+        Users users = userService.findByUserName(principal.getName());
+        List<Tasks> tasks = userService.getAllTasks(users.getId());
+        model.addAttribute("tasks", tasks);
+
+        System.out.println("Tasks: " + tasks);
 
         return "HomePage";
     }
 
-
     @GetMapping("/add")
-    public String addTask(Model model){
-
+    public String addTasks(Model model){
         Tasks tasks = new Tasks();
 
         model.addAttribute("tasks", tasks);
@@ -115,21 +103,69 @@ public class MainController {
         return "addPage";
     }
 
+
     @PostMapping("/addTasks")
-    public String adding(@ModelAttribute("tasks")Tasks theTasks, BindingResult bindingResult){
+    public String processingTasks(@ModelAttribute Tasks tasks){
 
-        if (bindingResult.hasErrors()){
-            return "rough";
-        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        userDao.addTasks(theTasks);
+        String username = authentication.getName();
+        Users users = userService.findByUserName(username);
+
+
+        //UserDetails users1 = userService.loadUserByUsername(users.getUsername());
+
+        System.out.println("name " + users.getUsername());
+
+
+
+        tasks.setTitle(tasks.getTitle());
+        tasks.setStartDate(tasks.getStartDate());
+        tasks.setFinishDate(tasks.getFinishDate());
+
+        users.add(tasks);
+
+        System.out.println("users Object" + users);
+
+        userService.createTask(tasks);
 
         return "redirect:/home";
     }
 
+    @PostMapping("/delete/{id}")
+    public  String delete(@PathVariable int id){
+        userService.delete(id);
+        return "redirect:/home";
+    }
 
 
+    @GetMapping("/update/{id}")
+    public String preUpdate(@PathVariable int id , Model model, Principal principal ){
+
+        Users users = userService.findByUserName(principal.getName());
+
+       Tasks tasks = userService.getTaskById(id);
+
+        model.addAttribute("tasks", tasks);
+
+
+        System.out.println("redirecting to update form");
+        return "updatePage";
+    }
+
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable int id, @ModelAttribute Tasks tasks){
+
+        Tasks existingTasks = userService.getTaskById(id);
+        existingTasks.setTitle(tasks.getTitle());
+
+
+        userService.update(existingTasks);
+
+
+        System.out.println("update reached here");
+
+        return "redirect:/home";
+    }
 
 }
-
-

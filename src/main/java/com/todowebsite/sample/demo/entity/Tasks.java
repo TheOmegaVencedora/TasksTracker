@@ -1,8 +1,10 @@
-package com.todowebsite.sample.demo.entity;
+package com.todowebsite.sample.demo.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tasks")
@@ -12,33 +14,30 @@ public class Tasks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-
     @Column(name = "title")
     private String title;
-
-
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "users_id")
+    @ManyToOne(cascade={CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name="user_id")
     private Users users;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "start_date")
-    private LocalDateTime start_date;
-
+    private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "finish_date")
-    private LocalDateTime finish_date;
-
-    @Column(name = "status", columnDefinition = "VARCHAR(10) CHECK(status IN ('active', 'inactive'))")
-    private String status;
-
-
-
+    private LocalDate finishDate;
+    @Column(name = "status")
+    private  String status;
 
     public Tasks(){
 
     }
 
-    public Tasks(String title) {
+    public Tasks(String title, LocalDate startDate, LocalDate finishDate, String status) {
         this.title = title;
+        this.startDate = startDate;
+        this.finishDate = finishDate;
+        this.status = status;
     }
 
     public int getId() {
@@ -57,20 +56,22 @@ public class Tasks {
         this.title = title;
     }
 
-    public LocalDateTime getStart_date() {
-        return start_date;
+
+
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStart_date(LocalDateTime start_date) {
-        this.start_date = start_date;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDateTime getFinish_date() {
-        return finish_date;
+    public LocalDate getFinishDate() {
+        return finishDate;
     }
 
-    public void setFinish_date(LocalDateTime finish_date) {
-        this.finish_date = finish_date;
+    public void setFinishDate(LocalDate finishDate) {
+        this.finishDate = finishDate;
     }
 
     public String getStatus() {
@@ -87,5 +88,16 @@ public class Tasks {
 
     public void setUsers(Users users) {
         this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return "Tasks{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

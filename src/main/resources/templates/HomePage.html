@@ -21,16 +21,33 @@
             </tr>
             </thead>
             <tbody>
-            <th:forEach var="Tasks" items="${Tasks}">
-                <tr>
-                    <td><th:out value="*{title}"></th:out></td>
-                    <td><th:out value="*{start_date}"></th:out></td>
-                    <td><th:out value="*{finish_date}"></th:out></td>
-                    <td><th:out value="*{status}"></th:out></td>
-                    <td><th:out >check</th:out></td>
-                    <td><a href="delete?id=<c:out value='${todoItem.ID}'/>&username=<c:out value='${username}'/>">Delete</a></td>
+                <tr th:each="tasks : ${tasks}">
+                    <td th:text="*{tasks.title}">Title</td>
+                    <td th:text="*{tasks.startDate}">Start Date</td>
+                    <td th:text="*{tasks.finishDate}">Finish Date</td>
+                    <td th:text="*{tasks.status}">Status</td>
+                    <td>
+
+                        <form th:action="@{/delete/{id}(id=${tasks.id})}" method="POST">
+
+                            <button type="submit">Delete</button>
+
+                        </form>
+
+                    </td>
+
+                    <td>
+
+                        <form th:action="@{/update/{id}(id=${{tasks.id}})}" method="GET">
+
+                            <button type="submit">update</button>
+
+                        </form>
+
+                    </td>
+
+
                 </tr>
-            </th:forEach>
             </tbody>
         </table>
     </div>

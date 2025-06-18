@@ -1,13 +1,13 @@
-package com.todowebsite.sample.demo.dao;
+package com.todowebsite.sample.demo.service;
 
 import com.todowebsite.sample.demo.Entity.Tasks;
 import com.todowebsite.sample.demo.Entity.Users;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserDao {
-
-    Users findByUserName(String username);
+public interface UserService extends UserDetailsService {
+    Users findByUserName(String userName);
 
     void save(Users users);
 
@@ -20,5 +20,4 @@ public interface UserDao {
     void update(Tasks tasks);
 
     Tasks getTaskById(int id);
-
 }
